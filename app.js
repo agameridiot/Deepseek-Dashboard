@@ -1,5 +1,5 @@
 const SUPABASE_URL = "https://oazobowvagiywvpczmti.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9hem9ib3d2YWdpeXd2cGN6bXRpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwMDMzNDgsImV4cCI6MjA5NTU3OTM0OH0.3hxhmgC52pJu_ADtsnDNZCr5P-j5kZmWvqyIK27uNEw";
+const SUPABASE_KEY = "sb_publishable_PKC7Kum1tcX-9YISwy-3Tg_jVQEJ6Je";
 
 const supabaseClient = supabase.createClient(
   SUPABASE_URL,
