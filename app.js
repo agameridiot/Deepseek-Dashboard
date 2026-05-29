@@ -2,7 +2,7 @@
 const SUPABASE_URL = "https://oazobowvagiywvpczmti.supabase.co";
 const SUPABASE_KEY = "sb_publishable_PKC7Kum1tcX-9YISwy-3Tg_jVQEJ6Je";
 const DEEPSEEK_API = "https://api.deepseek.com/chat/completions";
-const VALID_MODELS  = ["deepseek-chat", "deepseek-reasoner", "deepseek-coder"];
+const VALID_MODELS  = ["deepseek-chat", "deepseek-reasoner", "deepseek-coder", "deepseek-v4-flash", "deepseek-v4-pro"];
 
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
