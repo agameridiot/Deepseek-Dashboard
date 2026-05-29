@@ -6,7 +6,7 @@ body {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 .centerBox {
@@ -33,9 +33,12 @@ button {
 }
 
 #chatScreen {
-  display: flex;
   flex-direction: column;
   height: 100vh;
+}
+
+#chatScreen:not(.hidden) {
+  display: flex;
 }
 
 #topBar {
@@ -43,6 +46,7 @@ button {
   justify-content: space-between;
   padding: 10px;
   background: #1e1e1e;
+  gap: 10px;
 }
 
 #messages {
@@ -58,4 +62,31 @@ button {
   max-width: 75%;
   white-space: pre-wrap;
 }
+
+.user {
+  background: #2b6cff;
+  margin-left: auto;
+}
+
+.assistant {
+  background: #333;
+}
+
+.modelTag {
+  font-size: 12px;
+  opacity: 0.6;
+  margin-bottom: 6px;
+}
+
+#bottomBar {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background: #1e1e1e;
+}
+
+#messageInput {
+  flex: 1;
+  height: 70px;
+  resize: none;
 }
