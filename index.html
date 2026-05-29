@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeepSeek Chat</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<div id="loginScreen" class="centerBox">
+  <h1>DeepSeek Chat</h1>
+
+  <input id="passwordInput" placeholder="Chat Password">
+
+  <button id="enterBtn">Enter</button>
+</div>
+
+<div id="chatScreen" class="hidden">
+
+  <div id="topBar">
+    <div>
+      <input id="apiKeyInput" placeholder="DeepSeek API Key">
+
+      <button id="saveApiBtn">Save Key</button>
+    </div>
+
+    <div>
+      <select id="modelSelect">
+        <option value="deepseek-chat">deepseek-chat</option>
+        <option value="deepseek-reasoner">deepseek-reasoner</option>
+        <option value="deepseek-coder">deepseek-coder</option>
+        <option value="deepseek-coder-v2">deepseek-coder-v2</option>
+        <option value="deepseek-v4-flash">deepseek-v4-flash</option>
+        <option value="deepseek-v4-pro">deepseek-v4-pro</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="messages"></div>
+
+  <div id="bottomBar">
+    <textarea id="messageInput" placeholder="Message"></textarea>
+
+    <button id="sendBtn">Send</button>
+  </div>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
