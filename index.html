@@ -1,56 +1,119 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DeepSeek Chat</title>
-
-  <link rel="stylesheet" href="style.css">
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tokyo-night-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="loginScreen" class="centerBox">
-  <h1>DeepSeek Chat</h1>
-
-  <input id="passwordInput" placeholder="Chat Password">
-
-  <button id="enterBtn">Enter</button>
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-glow"></div>
+  <div class="login-box">
+    <div class="login-logo">
+      <span class="logo-bracket">[</span>
+      <span class="logo-text">DS</span>
+      <span class="logo-bracket">]</span>
+    </div>
+    <h1 class="login-title">DeepSeek Chat</h1>
+    <p class="login-sub">Enter your room password to continue</p>
+    <div class="input-group">
+      <input id="passwordInput" type="password" placeholder="Room password" autocomplete="off">
+      <button id="enterBtn">Enter <span class="btn-arrow">→</span></button>
+    </div>
+    <p id="loginError" class="error-msg hidden">Incorrect password or connection failed.</p>
+  </div>
 </div>
 
+<!-- CHAT -->
 <div id="chatScreen" class="hidden">
 
-  <div id="topBar">
-    <div>
-      <input id="apiKeyInput" placeholder="DeepSeek API Key">
-
-      <button id="saveApiBtn">Save Key</button>
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-logo"><span class="logo-bracket">[</span>DS<span class="logo-bracket">]</span></span>
+      <button id="sidebarToggle" title="Close sidebar">✕</button>
     </div>
 
-    <div>
+    <div class="sidebar-section">
+      <label class="sidebar-label">API KEY</label>
+      <div class="key-row">
+        <input id="apiKeyInput" type="password" placeholder="sk-..." autocomplete="off">
+        <button id="saveApiBtn" title="Save">✓</button>
+      </div>
+      <p id="keyStatus" class="key-status"></p>
+    </div>
+
+    <div class="sidebar-section">
+      <label class="sidebar-label">MODEL</label>
       <select id="modelSelect">
         <option value="deepseek-chat">deepseek-chat</option>
         <option value="deepseek-reasoner">deepseek-reasoner</option>
         <option value="deepseek-coder">deepseek-coder</option>
-        <option value="deepseek-coder-v2">deepseek-coder-v2</option>
-        <option value="deepseek-v4-flash">deepseek-v4-flash</option>
-        <option value="deepseek-v4-pro">deepseek-v4-pro</option>
       </select>
     </div>
-  </div>
 
-  <div id="messages"></div>
+    <div class="sidebar-section">
+      <label class="sidebar-label">CHATS</label>
+      <div id="chatList" class="chat-list"></div>
+      <button id="newChatBtn" class="new-chat-btn">+ New Chat</button>
+    </div>
 
-  <div id="bottomBar">
-    <textarea id="messageInput" placeholder="Message"></textarea>
+    <div class="sidebar-footer">
+      <button id="clearChatBtn" class="danger-btn">Clear Current Chat</button>
+      <button id="logoutBtn" class="muted-btn">← Logout</button>
+    </div>
+  </aside>
 
-    <button id="sendBtn">Send</button>
-  </div>
+  <main id="mainPanel">
+    <header id="topBar">
+      <button id="openSidebarBtn" title="Open sidebar">☰</button>
+      <div class="header-info">
+        <span id="currentChatLabel" class="chat-label">main</span>
+        <span id="currentModelLabel" class="model-badge">deepseek-chat</span>
+      </div>
+      <div id="statusDot" class="status-dot" title="Connected"></div>
+    </header>
+
+    <div id="messages">
+      <div id="emptyState" class="empty-state">
+        <div class="empty-icon">⬡</div>
+        <p>Send a message to start the conversation.</p>
+      </div>
+    </div>
+
+    <footer id="bottomBar">
+      <div class="input-row">
+        <textarea id="messageInput" placeholder="Message DeepSeek..." rows="1"></textarea>
+        <button id="sendBtn" disabled>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+      </div>
+      <p class="footer-hint">Shift+Enter for new line · Enter to send</p>
+    </footer>
+  </main>
 
 </div>
 
-<script src="app.js"></script>
+<!-- CONFIRM MODAL -->
+<div id="modal" class="modal hidden">
+  <div class="modal-box">
+    <p id="modalText">Are you sure?</p>
+    <div class="modal-btns">
+      <button id="modalCancel">Cancel</button>
+      <button id="modalConfirm" class="danger-btn">Confirm</button>
+    </div>
+  </div>
+</div>
 
+<script src="app.js"></script>
 </body>
 </html>
