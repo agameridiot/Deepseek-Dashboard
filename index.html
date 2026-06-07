@@ -20,9 +20,7 @@
   <div class="login-glow"></div>
   <div class="login-box">
     <div class="login-logo">
-      <span class="logo-bracket">[</span>
-      <span class="logo-text">DS</span>
-      <span class="logo-bracket">]</span>
+      <span class="logo-bracket">[</span><span class="logo-text">DS</span><span class="logo-bracket">]</span>
     </div>
     <h1 class="login-title">DeepSeek Chat</h1>
     <p class="login-sub">Enter your room password to continue</p>
@@ -43,36 +41,95 @@
       <button id="sidebarToggle" title="Close sidebar">✕</button>
     </div>
 
-    <div class="sidebar-section">
-      <label class="sidebar-label">API KEY</label>
-      <div class="key-row">
-        <input id="apiKeyInput" type="password" placeholder="sk-..." autocomplete="off">
-        <button id="saveApiBtn" title="Save">✓</button>
+    <!-- NAV TABS -->
+    <div class="sidebar-tabs">
+      <button class="stab active" data-tab="chats">Chats</button>
+      <button class="stab" data-tab="prompts">Prompts</button>
+      <button class="stab" data-tab="settings">Settings</button>
+    </div>
+
+    <!-- TAB: CHATS -->
+    <div class="sidebar-tab-content" id="tab-chats">
+      <div class="sidebar-section">
+        <label class="sidebar-label">CHATS</label>
+        <div id="chatList" class="chat-list"></div>
+        <button id="newChatBtn" class="new-chat-btn">+ New Chat</button>
       </div>
-      <p id="keyStatus" class="key-status"></p>
+      <div class="sidebar-footer">
+        <button id="clearChatBtn" class="danger-btn">Clear Current Chat</button>
+        <button id="logoutBtn" class="muted-btn">← Logout</button>
+      </div>
     </div>
 
-    <div class="sidebar-section">
-      <label class="sidebar-label">MODEL</label>
-      <select id="modelSelect">
-        <option value="deepseek-chat">deepseek-chat</option>
-        <option value="deepseek-reasoner">deepseek-reasoner</option>
-        <option value="deepseek-coder">deepseek-coder</option>
-        <option value="deepseek-v4-flash">deepseek-v4-flash</option>
-        <option value="deepseek-v4-pro">deepseek-v4-pro</option>
-      </select>
+    <!-- TAB: PROMPTS & MEMORY -->
+    <div class="sidebar-tab-content hidden" id="tab-prompts">
+
+      <!-- Active system prompt indicator -->
+      <div class="sidebar-section">
+        <label class="sidebar-label">ACTIVE SYSTEM PROMPT</label>
+        <div id="activePromptDisplay" class="active-prompt-display">
+          <span class="apd-none">None — using model default</span>
+        </div>
+        <button id="clearSystemPromptBtn" class="muted-btn" style="width:100%;margin-top:6px;font-size:11px;">✕ Clear Active Prompt</button>
+      </div>
+
+      <!-- Prompt library -->
+      <div class="sidebar-section prompt-library-section">
+        <label class="sidebar-label">PROMPT LIBRARY</label>
+
+        <div class="prompt-filter-row">
+          <button class="pcat active" data-cat="all">All</button>
+          <button class="pcat" data-cat="code">Code</button>
+          <button class="pcat" data-cat="style">Style</button>
+          <button class="pcat" data-cat="persona">Persona</button>
+          <button class="pcat" data-cat="memory">Memory</button>
+          <button class="pcat" data-cat="custom">Custom</button>
+        </div>
+
+        <div id="promptList" class="prompt-list"></div>
+
+        <button id="addPromptBtn" class="new-chat-btn" style="margin-top:8px;">+ Custom Prompt</button>
+      </div>
+
+      <!-- Attached files -->
+      <div class="sidebar-section">
+        <label class="sidebar-label">ATTACHED FILES</label>
+        <div id="attachedFilesList" class="attached-files-list">
+          <span class="apd-none">No files attached</span>
+        </div>
+        <label class="file-upload-btn" for="fileUploadInput">+ Attach File</label>
+        <input type="file" id="fileUploadInput" multiple accept=".txt,.md,.js,.ts,.py,.json,.html,.css,.csv,.xml,.yaml,.yml,.sh" style="display:none">
+      </div>
+
     </div>
 
-    <div class="sidebar-section">
-      <label class="sidebar-label">CHATS</label>
-      <div id="chatList" class="chat-list"></div>
-      <button id="newChatBtn" class="new-chat-btn">+ New Chat</button>
+    <!-- TAB: SETTINGS -->
+    <div class="sidebar-tab-content hidden" id="tab-settings">
+      <div class="sidebar-section">
+        <label class="sidebar-label">API KEY</label>
+        <div class="key-row">
+          <input id="apiKeyInput" type="password" placeholder="sk-..." autocomplete="off">
+          <button id="saveApiBtn" title="Save">✓</button>
+        </div>
+        <p id="keyStatus" class="key-status"></p>
+      </div>
+      <div class="sidebar-section">
+        <label class="sidebar-label">MODEL</label>
+        <select id="modelSelect">
+          <option value="deepseek-chat">deepseek-chat</option>
+          <option value="deepseek-reasoner">deepseek-reasoner</option>
+          <option value="deepseek-coder">deepseek-coder</option>
+          <option value="deepseek-v4-flash">deepseek-v4-flash</option>
+          <option value="deepseek-v4-pro">deepseek-v4-pro</option>
+        </select>
+      </div>
+      <div class="sidebar-section">
+        <label class="sidebar-label">RESPONSE FLAGS</label>
+        <p class="setting-hint">Flags are injected into the system prompt to shape how the model responds.</p>
+        <div id="flagsList" class="flags-list"></div>
+      </div>
     </div>
 
-    <div class="sidebar-footer">
-      <button id="clearChatBtn" class="danger-btn">Clear Current Chat</button>
-      <button id="logoutBtn" class="muted-btn">← Logout</button>
-    </div>
   </aside>
 
   <main id="mainPanel">
@@ -81,6 +138,7 @@
       <div class="header-info">
         <span id="currentChatLabel" class="chat-label">main</span>
         <span id="currentModelLabel" class="model-badge">deepseek-chat</span>
+        <span id="activePromptBadge" class="prompt-badge hidden"></span>
       </div>
       <div id="statusDot" class="status-dot" title="Connected"></div>
     </header>
@@ -93,6 +151,7 @@
     </div>
 
     <footer id="bottomBar">
+      <div id="activePromptsBar" class="active-prompts-bar hidden"></div>
       <div class="input-row">
         <textarea id="messageInput" placeholder="Message DeepSeek..." rows="1"></textarea>
         <button id="sendBtn" disabled>
@@ -112,6 +171,33 @@
     <div class="modal-btns">
       <button id="modalCancel">Cancel</button>
       <button id="modalConfirm" class="danger-btn">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROMPT EDITOR MODAL -->
+<div id="promptEditorModal" class="modal hidden">
+  <div class="modal-box wide">
+    <h3 id="promptEditorTitle" class="modal-title">New Prompt</h3>
+    <div class="prompt-editor-form">
+      <label class="form-label">Name</label>
+      <input id="peNameInput" type="text" class="form-input" placeholder="e.g. Senior Engineer">
+      <label class="form-label">Category</label>
+      <select id="peCatSelect" class="form-input">
+        <option value="custom">Custom</option>
+        <option value="code">Code</option>
+        <option value="style">Style</option>
+        <option value="persona">Persona</option>
+        <option value="memory">Memory</option>
+      </select>
+      <label class="form-label">Prompt Text</label>
+      <textarea id="peTextarea" class="form-input" rows="8" placeholder="You are..."></textarea>
+      <label class="form-label">Icon (emoji)</label>
+      <input id="peIconInput" type="text" class="form-input" placeholder="🤖" maxlength="4">
+    </div>
+    <div class="modal-btns">
+      <button id="peCancel" class="muted-btn">Cancel</button>
+      <button id="peSave" class="accent-btn">Save Prompt</button>
     </div>
   </div>
 </div>
