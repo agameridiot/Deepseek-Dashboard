@@ -1243,3 +1243,26 @@ select.form-input {
 }
 
 .accent-btn:hover { opacity: 0.85; }
+
+/* ─── STREAMING ─────────────────────────────────────────────────────────────── */
+.message.streaming .stream-content {
+  white-space: pre-wrap;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.stream-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: var(--accent);
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  border-radius: 1px;
+  animation: blink 0.8s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
