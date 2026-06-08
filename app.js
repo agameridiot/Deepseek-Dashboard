@@ -592,6 +592,48 @@ function renderThinking() {
   return div;
 }
 
+// Creates an empty assistant bubble ready to receive streamed text
+function createStreamingBubble(model) {
+  emptyState.classList.add("hidden");
+  const div = document.createElement("div");
+  div.className = "message assistant streaming";
+
+  const meta = document.createElement("div");
+  meta.className = "msg-meta";
+  const roleTag = document.createElement("span");
+  roleTag.className = "role-tag";
+  roleTag.textContent = "Assistant";
+  const modelTag = document.createElement("span");
+  modelTag.textContent = model || "";
+  meta.appendChild(roleTag);
+  if (model) meta.appendChild(modelTag);
+
+  const contentDiv = document.createElement("div");
+  contentDiv.className = "msg-content stream-content";
+
+  // blinking cursor
+  const cursor = document.createElement("span");
+  cursor.className = "stream-cursor";
+  contentDiv.appendChild(cursor);
+
+  div.appendChild(meta);
+  div.appendChild(contentDiv);
+  messagesDiv.appendChild(div);
+  scrollToBottom();
+  return { div, contentDiv, cursor };
+}
+
+// Finalise streaming bubble: re-render raw text as markdown/artifacts
+function finaliseStreamingBubble(contentDiv, cursor, rawText) {
+  cursor.remove();
+  contentDiv.innerHTML = "";
+  const processed = parseArtifacts(rawText, contentDiv);
+  if (!processed) {
+    contentDiv.innerHTML = renderMarkdown(rawText);
+    addCodeCopyButtons(contentDiv);
+  }
+}
+
 // ─── SEND MESSAGE ────────────────────────────────────────────────────────────
 messageInput.addEventListener("keydown", e => {
   if (e.key === "Enter" && !e.shiftKey) {
@@ -635,18 +677,19 @@ sendBtn.onclick = async () => {
   const thinkingDiv = renderThinking();
   const history = await getChatHistory();
 
-  // Build system prompt from active prompt + flags + attached files
   const systemPrompt = buildSystemPrompt();
-
   const messages = systemPrompt
     ? [{ role: "system", content: systemPrompt }, ...history]
     : history;
+
+  let streamBubble = null;
+  let rawReply = "";
 
   try {
     const response = await fetch(DEEPSEEK_API, {
       method: "POST",
       headers: { "Content-Type": "application/json", "Authorization": `Bearer ${key}` },
-      body: JSON.stringify({ model, messages })
+      body: JSON.stringify({ model, messages, stream: true })
     });
 
     if (!response.ok) {
@@ -654,15 +697,55 @@ sendBtn.onclick = async () => {
       throw new Error(err?.error?.message || `HTTP ${response.status}`);
     }
 
-    const data = await response.json();
     thinkingDiv.remove();
-    const reply = data.choices?.[0]?.message?.content || "(empty response)";
-    renderMessage("assistant", reply, model);
-    await saveMessage("assistant", reply, model);
+    streamBubble = createStreamingBubble(model);
+    const { contentDiv, cursor } = streamBubble;
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop(); // keep incomplete last line
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed || trimmed === "data: [DONE]") continue;
+        if (!trimmed.startsWith("data: ")) continue;
+
+        try {
+          const json = JSON.parse(trimmed.slice(6));
+          const delta = json.choices?.[0]?.delta?.content;
+          if (delta) {
+            rawReply += delta;
+            // Live plain-text preview while streaming (fast & cheap)
+            // Insert before cursor so cursor stays at end
+            const textNode = document.createTextNode(delta);
+            contentDiv.insertBefore(textNode, cursor);
+            scrollToBottom();
+          }
+        } catch (_) { /* malformed chunk, skip */ }
+      }
+    }
+
+    // Stream finished — re-render as proper markdown/artifacts
+    finaliseStreamingBubble(contentDiv, cursor, rawReply);
+    streamBubble.div.classList.remove("streaming");
+    scrollToBottom();
+
+    await saveMessage("assistant", rawReply, model);
     setStatus("ok");
 
   } catch (err) {
     thinkingDiv.remove();
+    if (streamBubble) {
+      streamBubble.div.remove();
+    }
     renderError(err.message || "Request failed.");
     setStatus("err");
     setTimeout(() => setStatus("ok"), 4000);
