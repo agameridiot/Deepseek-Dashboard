@@ -1266,3 +1266,279 @@ select.form-input {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0; }
 }
+
+/* ─── STOP BUTTON ───────────────────────────────────────────────────────────── */
+.stop-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius);
+  background: rgba(255,85,85,0.15);
+  border: 1px solid rgba(255,85,85,0.3);
+  color: var(--danger);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all var(--transition);
+}
+.stop-btn:hover { background: rgba(255,85,85,0.25); border-color: var(--danger); }
+
+.input-actions {
+  display: flex;
+  gap: 6px;
+  align-items: flex-end;
+}
+
+/* ─── SCROLL TO BOTTOM ──────────────────────────────────────────────────────── */
+.scroll-bottom-btn {
+  position: absolute;
+  bottom: 110px;
+  right: 20px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--bg4);
+  border: 1px solid var(--border2);
+  color: var(--text2);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  z-index: 10;
+}
+.scroll-bottom-btn:hover { background: var(--bg3); color: var(--text); border-color: var(--accent); }
+
+#mainPanel { position: relative; }
+
+/* ─── MESSAGE ACTIONS ───────────────────────────────────────────────────────── */
+.msg-actions {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 4px;
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+.message:hover .msg-actions { opacity: 1; }
+
+.msg-action-btn {
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 5px;
+  background: var(--bg4);
+  border: 1px solid var(--border);
+  color: var(--text3);
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: var(--mono);
+}
+.msg-action-btn:hover { color: var(--accent); border-color: var(--accent); background: rgba(68,170,255,0.08); }
+
+/* ─── MESSAGE TIMESTAMPS ────────────────────────────────────────────────────── */
+.msg-ts {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--text3);
+  font-family: var(--mono);
+}
+
+/* ─── STREAM TOKEN COUNTER ──────────────────────────────────────────────────── */
+.stream-token-counter {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  margin-right: 8px;
+  animation: fadeIn 0.3s ease;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ─── CHAT SEARCH ───────────────────────────────────────────────────────────── */
+.section-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.section-row .sidebar-label { margin-bottom: 0; }
+
+.icon-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
+  font-size: 16px;
+  color: var(--text3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+}
+.icon-btn:hover { color: var(--accent); background: var(--bg4); }
+
+.chat-search-wrap { margin-bottom: 8px; }
+
+.search-input {
+  width: 100%;
+  padding: 7px 10px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 12px;
+  font-family: var(--mono);
+  color: var(--text);
+  transition: border-color var(--transition);
+}
+.search-input:focus { border-color: var(--accent); outline: none; }
+.search-input::placeholder { color: var(--text3); }
+
+.search-results {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 8px;
+}
+
+.search-result-item {
+  padding: 7px 10px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.search-result-item:hover { background: var(--bg4); border-color: var(--accent); }
+
+.sr-meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent);
+  margin-bottom: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sr-snippet {
+  font-size: 11px;
+  color: var(--text2);
+  line-height: 1.4;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* ─── SYNC STATUS ───────────────────────────────────────────────────────────── */
+.sync-status {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  transition: color var(--transition);
+}
+.sync-status.ok      { color: #4d4; }
+.sync-status.err     { color: var(--danger); }
+.sync-status.syncing { color: var(--accent); }
+
+/* ─── EXPORT / FOOTER ROW ───────────────────────────────────────────────────── */
+.footer-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.danger-btn.half, .muted-btn.half {
+  flex: 1;
+  text-align: center;
+}
+
+/* ─── PARAMETERS (sliders) ──────────────────────────────────────────────────── */
+.param-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.param-label {
+  font-size: 11px;
+  color: var(--text2);
+  font-family: var(--mono);
+  width: 90px;
+  flex-shrink: 0;
+}
+.param-slider {
+  flex: 1;
+  appearance: none;
+  height: 3px;
+  background: var(--border2);
+  border-radius: 99px;
+  cursor: pointer;
+  outline: none;
+}
+.param-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  transition: transform var(--transition);
+}
+.param-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+.param-val {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent);
+  width: 38px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ─── TOKEN STATS ───────────────────────────────────────────────────────────── */
+.token-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.token-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-family: var(--mono);
+  color: var(--text2);
+}
+.token-row.total { color: var(--text); font-weight: 600; border-top: 1px solid var(--border); padding-top: 6px; }
+.token-row span:last-child { color: var(--accent); }
+
+/* ─── KEYBOARD SHORTCUTS ────────────────────────────────────────────────────── */
+.shortcuts-list { display: flex; flex-direction: column; gap: 6px; }
+.shortcut-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  color: var(--text2);
+}
+kbd {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 2px 6px;
+  background: var(--bg4);
+  border: 1px solid var(--border2);
+  border-radius: 4px;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* ─── EMPTY STATE HINT ──────────────────────────────────────────────────────── */
+.empty-hint {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: -4px;
+}
